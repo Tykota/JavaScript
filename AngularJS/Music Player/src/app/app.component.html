@@ -1,0 +1,33 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    The low budget streaming site
+  </h1>
+</div>
+<h2>Music Player</h2>
+<ul>
+  <li>
+    <button (click)="playSong()" id = "play">Play</button>
+  </li>
+  <li>
+    <button (click)= "pauseSong()"id = "pause">Pause</button>
+  </li>
+  <li>
+    <button (click)="nextSong()" id = "next">Next</button>
+  </li>
+</ul>
+
+<router-outlet><ul>
+  <li> <button (click)="changeSong('1')">8 bit dungeon boss</button> </li>
+  <li> <button (click)="changeSong('2')">At Launch</button> </li>
+  <li> <button (click)="changeSong('3')">Autumn Day</button> </li>
+  <li> <button (click)="changeSong('4')">Artifact</button> </li>
+  <li> <button (click)="changeSong('5')">Ascending the Vale</button> </li>
+  <li> <button (click)="changeSong('6')">baby Yaga</button> </li>
+  <li> <button (click)="changeSong('7')">Bent And Broken</button> </li>
+  <li> <button (click)="changeSong('8')">Bit Shift</button> </li>
+</ul></router-outlet>
+
+<div style="position:fixed; bottom: 0; left: 0; right: 0; height: 25px; background: lightblue; padding-bottom: 25px; padding-left: 15px">
+  <app-footer></app-footer>
+</div>
