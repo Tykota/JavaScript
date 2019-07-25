@@ -6,10 +6,12 @@
 
     <script>
 
+
+        //Initiates the game by picking a random word to have the user guess letters of
         function initiate() {
                 index = 0;
 
-                let arrayofWords =["Compiler", "Computer", "Crapple", "Chungus", "bunny", "CMPSC", "programming",
+                let arrayofWords =["Compiler", "Computer", "apple", "Chungus", "bunny", "CMPSC", "programming",
                 "netcentric", "water", "Maryland", "Pennsylvania", "Murica", "America", "Harrisburg", "mafia",
                 "string", "integer", "array", "javascript", "HTML", "super", "love", "Monitor", "Fortnite",
                 "floss", "marshmello", "dubstep", "bottle", "phone", "done"];
@@ -29,10 +31,14 @@
             }
 
 
+        //replace an element at a certain index with the character (char)
+        //note - char is not a native datatype in JavaScript
         function replaceWith(s, char, index){
             return String(s).substr(0,index) + char + String(s).substr(index+1, s.length);
         }
 
+        //Checks the string to see if the letter the user entered has it in it, if it does the underscore and letter
+        //swap places
         function test() {
             let character = document.getElementById("entrybox").value;
             if (character != '' && character != '_' && character.length == 1) {
