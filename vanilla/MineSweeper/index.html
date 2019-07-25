@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game with mines</title>
+
+    <script>
+        let columns;
+        let rows;
+        let mines;
+        let placed = false;
+        let arrayOfElements = [];
+        let revealed = 0;
+
+
+        //Remember that cells are addressed starting from 0
+        function initialize(){
+            columns = document.getElementById("rows").value;
+            rows = document.getElementById("columns").value;
+            mines = document.getElementById("mines").value;
+
+            for(i = 0; i < rows; i++){
+                arrayOfElements[i] = [];
+            }
+            let table = document.getElementById("game");
+            for(i = 0; i < rows; i++){
+                let row = table.insertRow(i);
+                for(j = 0; j < columns; j++){
+                    let cell = row.insertCell(j);
+                    let elementHMTL = "<button style=\"background: url(facingDown.png); -webkit-background-size: 100%;background-size: 100%; height: 25px; fit-content; width: 25px; fit-content\" id = \"" + i + " " + j + "\" onclick=\"gameElementClicked(" + i + ", " + j + ")\"></button>";
+                    cell.innerHTML = elementHMTL;
+                    arrayOfElements[i][j] = 0;
+                }
+            }
+
+        }
+
+
+        //creates a count of number of mines near the revealed element
+        function countMines(row, column){
+            let count = 0;
+            //Special cases to consider
+            if(row == 0 && column == 0){
+                if(arrayOfElements[row][column + 1] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row + 1][column + 1] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row + 1][column] == 1){
+                    count++;
+                }
+            }else if(row == 0 && column + 1 == columns) {
+                //Check only r-1 c-1, c-1, r-1
+                if(arrayOfElements[row + 1][column - 1] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row][column - 1] == 1){
+                    count++;
+                }
+                //Bottom Middle
+                if(arrayOfElements[row + 1][column] == 1){
+                    count++;
+                }
+            } else if(row + 1 == rows && column + 1 == columns){
+                // check only c-1, c-1 r+1, r+1
+                if(arrayOfElements[row][column - 1] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row - 1][column - 1] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row - 1][column] == 1){
+                    count++;
+                }
+            }else if (column == 0 && row + 1 == rows){
+
+                //Check only r+1, c+1 r+1, c+1
+                if(arrayOfElements[row - 1][column] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row - 1][column + 1] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row][column + 1] == 1){
+                    count++;
+                }
+            }else if(row == 0){
+                //Check only (c-1), C+1, and 3 below
+                if(arrayOfElements[row + 1][column - 1] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row + 1][column] == 1 ){
+                    count++;
+                }
+                if(arrayOfElements[row + 1][column + 1] == 1 ){
+                    count++;
+                }
+                if(arrayOfElements[row][column - 1] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row][column + 1] == 1){
+                    count++;
+                }
+            }else if (column == 0){
+                //Check everything but left most column
+                if(arrayOfElements[row - 1][column] == 1){
+                    count++;
+                }
+                //TOP right
+                if(arrayOfElements[row - 1][column + 1] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row][column + 1] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row + 1][column] == 1){
+                    count++;
+                }
+                if(arrayOfElements[row + 1][column + 1] == 1){
+                    count++;
+                }
+            }else if (row + 1 == rows){
+                //Check all but bottom row
+                if(arrayOfElements[row - 1][column - 1] == 1){
+                    count++;
+                }
+                //  TOP Middle
+                if(arrayOfElements[row - 1][column] == 1){
+                    count++;
+                }
+                //TOP right
+                if(arrayOfElements[row - 1][column + 1] == 1){
+                    count++;
+                }
+                //CENTER left
+                if(arrayOfElements[row][column - 1] == 1){
+                    count++;
+                }
+                //CENTER right
+                if(arrayOfElements[row][column + 1] == 1){
+                    count++;
+                }
+
+            }else if(column + 1 == columns){
+                //Check all but right most column
+                if(arrayOfElements[row - 1][column - 1] == 1){
+                    count++;
+                }
+                //  TOP Middle
+                if(arrayOfElements[row - 1][column] == 1){
+                    count++;
+                }
+                //CENTER left
+                if(arrayOfElements[row][column - 1] == 1){
+                    count++;
+                }
+                //Bottom left
+                if(arrayOfElements[row + 1][column - 1] == 1){
+                    count++;
+                }
+                //Bottom Middle
+                if(arrayOfElements[row + 1][column] == 1){
+                    count++;
+                }
+            }else{
+                //Check all
+                //TOP Left
+                if(arrayOfElements[row - 1][column - 1] == 1){
+                    count++;
+                }
+
+                //  TOP Middle
+                if(arrayOfElements[row - 1][column] == 1){
+                    count++;
+                }
+
+                //TOP right
+                if(arrayOfElements[row - 1][column + 1] == 1){
+                    count++;
+                }
+
+                //CENTER left
+                if(arrayOfElements[row][column - 1] == 1){
+                    count++;
+                }
+
+                //CENTER right
+                if(arrayOfElements[row][column + 1] == 1){
+                    count++;
+                }
+
+                //Bottom left
+                if(arrayOfElements[row + 1][column - 1] == 1){
+                    count++;
+                }
+
+                //Bottom Middle
+                if(arrayOfElements[row + 1][column] == 1){
+                    count++;
+                }
+
+                //bottom right
+                if(arrayOfElements[row + 1][column + 1] == 1){
+                    count++;
+                }
+            }
+            return count;
+        }
+
+
+
+
+        //Places the mines in random rows and columns
+        function placeMines(row, column){
+
+            let randomRow;
+            let randomColumn;
+            for(i = 0; i < mines; i++) {
+                do {
+
+                    do {
+                        randomRow = Math.floor(Math.random() * rows);
+                    } while (row == randomRow);
+
+                    do {
+                        randomColumn = Math.floor(Math.random() * columns)
+                    } while (column == randomColumn);
+
+                }while(arrayOfElements[randomRow][randomColumn] == 1);
+
+                arrayOfElements[randomRow][randomColumn] = 1;
+            }
+
+            placed = true;
+        }
+
+
+        //Needs to
+        //1. Check if the user has previously clicked and if not place the mines DONE
+        //2. If the mines are placed then check if user clicked on a mine DONE
+        //3. if not clicked on a mine display the number underneath and if no mines around reveal all 8 tiles around mine
+
+        //KEY FOR ARRAY
+        // 0 = no mine
+        // 1 = mine
+        // -1 = revealed
+        function gameElementClicked(row, column) {
+            if(placed == false){
+                placeMines(row, column);
+            }
+
+            if(arrayOfElements[row][column] == -1){
+
+            }else if(arrayOfElements[row][column] == 1){
+                let cell = document.getElementById(row + " " + column);
+                let updateUsingThis = "background: url(bomb.png); -webkit-background-size: 100%;background-size: 100%; height: 25px; fit-content; width: 25px; fit-content";
+                cell.style = updateUsingThis;
+                window.alert("BOOM! Better luck next time");
+                location.reload();
+            }else if(arrayOfElements[row][column] == 0) {
+                revealed++;
+                arrayOfElements[row][column] = -1;
+                let count = countMines(row, column);
+                let cell = document.getElementById(row + " " + column);
+                let updateUsingThis = "background: url(" + count + ".png); -webkit-background-size: 100%;background-size: 100%; height: 25px; fit-content; width: 25px; fit-content";
+                cell.style = updateUsingThis;
+                if(count == 0){
+                    if(row == 0 && column == 0){
+                        gameElementClicked(row, column + 1);
+                        gameElementClicked(row+1,column+1);
+                        gameElementClicked(row+1, column+1);
+                    }else if(row == 0 && column + 1 == columns) {
+                        gameElementClicked(row, column-1);
+                        gameElementClicked(row+1, column-1);
+                        gameElementClicked(row+1, column);
+                    } else if(row + 1 == rows && column + 1 == columns){
+                        gameElementClicked(row-1, column-1);
+                        gameElementClicked(row-1, column-1);
+                        gameElementClicked(row, column-1);
+                    }else if (column == 0 && row + 1 == rows){
+                        gameElementClicked(row-1, column);
+                        gameElementClicked(row-1,column+1);
+                        gameElementClicked(row, column+1);
+                    }else if(row == 0){
+                        gameElementClicked(row, column-1);
+                        gameElementClicked(row+1, column-1);
+                        gameElementClicked(row+1, column);
+                        gameElementClicked(row+1, column+1);
+                        gameElementClicked(row, column+1);
+                    }else if (column == 0){
+                        gameElementClicked(row-1,column);
+                        gameElementClicked(row-1, column +1);
+                        gameElementClicked(row, column+1);
+                        gameElementClicked(row+1, column+1);
+                        gameElementClicked(row+1, column);
+                    }else if (row + 1 == rows){
+                        gameElementClicked(row, column-1);
+                        gameElementClicked(row-1,column-1);
+                        gameElementClicked(row-1,column);
+                        gameElementClicked(row-1, column+1);
+                        gameElementClicked(row, column+1);
+                    }else if(column + 1 == columns){
+                        gameElementClicked(row+1, column);
+                        gameElementClicked(row+1, column-1);
+                        gameElementClicked(row,column-1);
+                        gameElementClicked(row-1,column-1);
+                        gameElementClicked(row-1, column);
+                    }else{
+                        gameElementClicked(row-1, column-1);
+                        gameElementClicked(row-1, column);
+                        gameElementClicked(row-1, column+1);
+                        gameElementClicked(row,column-1);
+                        gameElementClicked(row, column+1);
+                        gameElementClicked(row+1, column-1);
+                        gameElementClicked(row+1, column);
+                        gameElementClicked(row+1, column+1);
+                    }
+                }
+                if(revealed == (rows*columns)-mines){
+                    window.alert("WINNER!!!");
+                    location.reload();
+                }
+            }
+        }
+
+
+
+
+    </script>
+</head>
+<body>
+<h1>Rows</h1>
+<input id = "rows"/>
+
+<h1>Columns</h1>
+<input id = "columns"/>
+
+<h1>Mine count</h1>
+<input id = "mines"/>
+
+<button id = "Start" onclick="initialize()">Start!</button>
+
+<table id = "game" style="width: 100%; height: 100%; padding: 0px; margin: 0px; border-spacing: 0px; display: block;">
+
+</table>
+
+
+</body>
+</html>
