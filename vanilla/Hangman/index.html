@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+
+        function initiate() {
+                index = 0;
+
+                let arrayofWords =["Compiler", "Computer", "Crapple", "Chungus", "bunny", "CMPSC", "programming",
+                "netcentric", "water", "Maryland", "Pennsylvania", "Murica", "America", "Harrisburg", "mafia",
+                "string", "integer", "array", "javascript", "HTML", "super", "love", "Monitor", "Fortnite",
+                "floss", "marshmello", "dubstep", "bottle", "phone", "done"];
+
+                let indx = Math.floor(Math.random()*arrayofWords.length);
+
+                searchThisString = arrayofWords[indx];
+                searchThisString = searchThisString.toLowerCase();
+
+
+                stringLength = "";
+                for (i = 0; i < searchThisString.length; i++) {
+                    stringLength = stringLength + "_" + " ";
+                }
+
+                document.getElementById("word").value = stringLength;
+            }
+
+
+        function replaceWith(s, char, index){
+            return String(s).substr(0,index) + char + String(s).substr(index+1, s.length);
+        }
+
+        function test() {
+            let character = document.getElementById("entrybox").value;
+            if (character != '' && character != '_' && character.length == 1) {
+
+                if (searchThisString.search(character) != -1) {
+                    while (searchThisString.search(character) != -1) {
+                        let index = searchThisString.search(character);
+                        searchThisString = replaceWith(searchThisString, '_', index);
+                        stringLength = replaceWith(stringLength, character, index * 2);
+                        document.getElementById("word").value = stringLength;
+
+                        if (stringLength.search('_') == -1) {
+                            window.alert("WINNER!!!!!");
+                            location.reload();
+                        }
+
+                    }
+                } else {
+                    index = index + 1;
+                    document.getElementById("hangman").src = String(index + ".jpg");
+                    if (index == 10) {
+                        window.alert("You lost");
+                        location.reload();
+                    }
+                }
+                document.getElementById("entrybox").value = '';
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Hangman</h1>
+<img id = "hangman" src="0.jpg" alt="Hangman 0"/>
+<input id="word" value="" readonly/>
+<script> initiate()</script>
+<input id = "entrybox" value = ""/>
+<button id = "go" onclick="test()">GO </button>
+
+</body>
+</html>
