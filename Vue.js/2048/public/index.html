@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>2048</title>
+      <script>
+
+        //Creates a new game for the user
+          function newGame(){
+            for(let i = 1; i <= 16; i ++){
+              document.getElementById(i.toString()).innerText = ' ';
+            }
+             addGameElements();
+          }
+
+          //Adds the game elements into the board
+          function addGameElements(){
+            var rand1 = Math.floor(Math.random() * (16)).toString();
+            var rand2 = Math.floor(Math.random() * (16)).toString();
+
+            while(rand1 == rand2){
+              rand2 = Math.floor(Math.random() * (16)).toString();
+            }
+
+            document.getElementById(rand1).innerText = "2";
+            document.getElementById(rand2).innerText = "2";
+          }
+
+          //Listens for keypresses on the keyboard
+          document.addEventListener("keydown", function(event) {
+                if(event.key == "ArrowDown"){
+                    shiftDown()
+                }else if(event.key == "ArrowUp"){
+                    //shift("up")
+                    shiftUp();
+                }else if(event.key == "ArrowLeft"){
+                    //shift("left");
+                }else if(event.key == "ArrowRight") {
+                   // shift("right");
+                }
+                addGameElements();
+        })
+
+
+        //Shifts the tiles up
+          function shiftUp(){
+            for(let i = 1; i <= 16; i++){
+
+              if(i-4 > 0 && document.getElementById(i.toString()).toString() != ' ') {
+                let elementMoving = document.getElementById(i.toString());
+                let movingTo = document.getElementById((i - 4).toString());
+                let temp = i-4;
+                while(temp > 0){
+                  if(elementMoving.innerText == movingTo.innerText){
+                    movingTo.innerText = (movingTo.innerText *2).toString();
+                    elementMoving.innerText = ' ';
+                  }else if(movingTo.innerText == ' '){
+                    movingTo.innerText = elementMoving.innerText.toString();
+                    elementMoving.innerText = ' ';
+                  }
+
+                  temp = temp - 4;
+                }
+              }
+            }
+          }
+
+
+          //Shifts the tiles down
+          function shiftDown(){
+            for(let i = 1; i <= 16; i++){
+
+              if(i+4 > 0 && document.getElementById(i.toString()).toString() != ' ') {
+                let elementMoving = document.getElementById(i.toString());
+                let movingTo = document.getElementById((i + 4).toString());
+                let temp = i+4;
+                while(temp <= 16){
+                  if(elementMoving.innerText == movingTo.innerText){
+                    movingTo.innerText = (movingTo.innerText *2).toString();
+                    elementMoving.innerText = ' ';
+                  }else if(movingTo.innerText == ' '){
+                    movingTo.innerText = elementMoving.innerText.toString();
+                    elementMoving.innerText = ' ';
+                  }
+
+                  temp = temp + 4;
+                }
+              }
+            }
+          }
+          function shift(direction){
+            let dirModifier = 0;
+            if(direction == "right"){
+              dirModifier = -1;
+            }else if(direction == "left"){
+              dirModifier = 1;
+            }else if(direction == "up"){
+              dirModifier = 4;
+            }else if(direction == "down"){
+              dirModifier = -4;
+            }
+            for(let i = 1; i <= 16; i++){
+              if(document.getElementById(i.toString()).innerText.toString() != ''){
+                let j = i;
+
+                while(j + dirModifier > 0 && j + dirModifier <=16){
+
+                  let temp = j + dirModifier;
+                  let elementMoving = document.getElementById(j.toString());
+                  let movingTo = document.getElementById((temp).toString());
+                  if(elementMoving.innerText == movingTo.innerText && movingTo.innerText != '' && elementMoving.innerText != ''){
+                    //when they match combine them
+                    movingTo.innerText = elementMoving.innerText *2;
+                    elementMoving.innerText = '';
+                  }else if(movingTo.innerText == ''){
+                    //when there is nothing move up
+                    movingTo.innerText = elementMoving.innerText;
+                    elementMoving.innerText = '';
+                  }else{
+                    j = 0;
+                  }
+                  j = j + dirModifier;
+                }
+              }
+            }
+          }
+
+
+      </script>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but 2048 doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+
+    <button onclick="newGame()">New Game</button>
+    <div id="app">
+
+    </div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
