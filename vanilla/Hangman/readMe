@@ -1,2 +1,2 @@
-This hangman game was created using Vanilla JavaScript, you cannot place flags. 
-  -This was done to make it harder
+This hangman game was created using Vanilla JavaScript. The word is automatically pulled from a small set of words.
+This could be expanded using a wordlist.
